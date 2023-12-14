@@ -11,7 +11,7 @@ function Workspaces() {
     const navigate = useNavigate();
 
     function handleOpenTable() {
-        navigate('/table');
+        navigate('/user/table');
     }
 
     const content = tables.map(table => 

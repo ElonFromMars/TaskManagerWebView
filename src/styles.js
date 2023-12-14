@@ -48,10 +48,47 @@ export const styles = {
         },
         m: 0.5
     },
+    profileButton: {
+        bgcolor: "gray",
+        color: "white",
+        '&:hover': {
+            backgroundColor: "blue !important"
+        },
+    },
     navigationBar: {
+        display: "flex",
         bgcolor: "#78909c",
         m: 0,
         p: 0,
-        height: 50
+        height: 55,
     },
+    navigationBarLeft: {
+        display: "flex",
+        justifyContent: 'flex-start',
+        flexGrow: 1,
+        alignItems: 'center',
+        pl: 0.65,
+    },
+    navigationBarRight: {
+        display: "flex",
+        justifyContent: 'flex-end',
+        alignItems: 'center',
+        pr: 1,
+    },
+    signinButton: {
+        bgcolor: "gray",
+        color: "white",
+        '&:hover': {
+            backgroundColor: "blue !important"
+        },
+        p: 2
+    },
+    mainPageHeaderContainer:{
+        display: "flex",
+        justifyContent: "center",
+    },
+    mainPageSignInContainer:{
+        display: "flex",
+        justifyContent: "center",
+    }
 };
