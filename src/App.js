@@ -1,10 +1,13 @@
 import { useState, useEffect } from 'react';
 import AddTask from './AddTask.js';
 import TaskList from './TaskList.js';
+import TaskDescription from './TaskDescription.js';
 
 
 export default function TaskApp() {
   const [tasks, setTasks] = useState(initialTasks);
+  const [openTaskDescription, setOpenTaskDescription] = useState(false);
+  const [openedTask, setOpenedTask] = useState(null);
   //const [loadedTasks, setData] = useState(null);
   //const [loading, setLoading] = useState(true);
 
@@ -36,6 +39,7 @@ export default function TaskApp() {
   }
 
   function handleChangeTask(task) {
+    
     setTasks(
       tasks.map((t) => {
         if (t.id === task.id) {
@@ -51,6 +55,11 @@ export default function TaskApp() {
     setTasks(tasks.filter((t) => t.id !== taskId));
   }
 
+  function handleOpenTask(taskId) {
+    setOpenedTask(tasks.find(t => t.id === taskId));
+    setOpenTaskDescription(true);
+  }
+
   return (
     <>
       <h1>Prague itinerary</h1>
@@ -59,7 +68,14 @@ export default function TaskApp() {
         tasks={tasks}
         onChangeTask={handleChangeTask}
         onDeleteTask={handleDeleteTask}
+        onOpenTask={handleOpenTask}
       />
+      {openTaskDescription && 
+      <TaskDescription 
+        task={openedTask}
+        open={openTaskDescription} 
+        setOpen={setOpenTaskDescription}
+      />}
     </>
   );
 }

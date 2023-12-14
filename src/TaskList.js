@@ -1,18 +1,18 @@
 import { useState } from 'react';
 
-export default function TaskList({tasks, onChangeTask, onDeleteTask}) {
+export default function TaskList({tasks, onChangeTask, onDeleteTask, onOpenTask}) {
   return (
     <ul>
       {tasks.map((task) => (
         <li key={task.id}>
-          <Task task={task} onChange={onChangeTask} onDelete={onDeleteTask} />
+          <Task task={task} onChange={onChangeTask} onDelete={onDeleteTask} onOpen={onOpenTask}/>
         </li>
       ))}
     </ul>
   );
 }
 
-function Task({task, onChange, onDelete}) {
+function Task({task, onChange, onDelete, onOpen}) {
   const [isEditing, setIsEditing] = useState(false);
   let taskContent;
   if (isEditing) {
@@ -35,6 +35,7 @@ function Task({task, onChange, onDelete}) {
       <>
         {task.text}
         <button onClick={() => setIsEditing(true)}>Edit</button>
+        <button onClick={() => onOpen(task.id)}>Open</button>
       </>
     );
   }
