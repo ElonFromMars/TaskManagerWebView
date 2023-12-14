@@ -8,7 +8,7 @@ function AddCard({cardList}) {
   const dispatch = useDispatch();
 
   const onAddButtonClicked = () => {
-    dispatch(cardAdded({ listId: cardList.id, title : text })).unwrap();
+    dispatch(cardAdded({ listId: cardList.id, title : text }));
     setText('');
   }
 

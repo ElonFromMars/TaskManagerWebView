@@ -6,7 +6,7 @@ import cardReducer from './features/cardSlice.js';
 
 export const store = configureStore({
     reducer: {
-        //workspaces: workspacesReducer,
+        workspaces: workspacesReducer,
         table: tableReducer,
         card: cardReducer,
     }

@@ -26,4 +26,32 @@ export const styles = {
         flexDirection: "column",
         justifyContent: 'flex-start',
     },
+
+    tableContainer: {
+        maxWidth:"md",
+    },
+
+    tableButton: {
+        height: 150,
+        width: 220,
+        bgcolor: "gray",
+        color: "white",
+        '&:hover': {
+            backgroundColor: "blue !important"
+        }
+    },
+    homeButton: {
+        bgcolor: "gray",
+        color: "white",
+        '&:hover': {
+            backgroundColor: "blue !important"
+        },
+        m: 0.5
+    },
+    navigationBar: {
+        bgcolor: "#78909c",
+        m: 0,
+        p: 0,
+        height: 50
+    },
 };

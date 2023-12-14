@@ -37,23 +37,13 @@ const tableSlice = createSlice({
     name: 'table',
     initialState,
     reducers: {
-        listAdded: {
-            reducer(state, action) {
-                state.lists.push(action.payload)
-            },
-            prepare(title) {
-                return {
-                    payload: {
-                        id: nanoid(),
-                        title,
-                        cards: [
-                        ]
-                    }
-                }
-            },
-        },
         cardAdded(state, action) {
-            
+            const card =
+            {
+                id: nanoid(),
+                title: action.payload.title,
+            } 
+            state.lists.find(l=>l.id === action.payload.listId)?.cards.push(card);
         },
         cardTitleChanged(state, action) {
             
