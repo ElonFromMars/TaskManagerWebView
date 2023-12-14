@@ -1,9 +1,28 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import AddTask from './AddTask.js';
 import TaskList from './TaskList.js';
 
+
 export default function TaskApp() {
   const [tasks, setTasks] = useState(initialTasks);
+  //const [loadedTasks, setData] = useState(null);
+  //const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch('http://localhost:8080/tasks');
+        const result = await response.json();
+        setTasks(result);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      } finally {
+        //setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []); // The empty dependency array ensures the effect runs once after the initial render
 
   function handleAddTask(text) {
     setTasks([
