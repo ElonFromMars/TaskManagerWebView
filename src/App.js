@@ -1,38 +1,53 @@
-import React, { useState, useEffect } from 'react';
+import { useState } from 'react';
+import AddTask from './AddTask.js';
+import TaskList from './TaskList.js';
 
-function App() {
-  const [apiData, setApiData] = useState(null);
+export default function TaskApp() {
+  const [tasks, setTasks] = useState(initialTasks);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch('http://localhost:8080/user/0');
-        const data = await response.json();
-        setApiData(data); // Update the state with API data
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
+  function handleAddTask(text) {
+    setTasks([
+      ...tasks,
+      {
+        id: nextId++,
+        text: text,
+        done: false,
+      },
+    ]);
+  }
 
-    fetchData();
-  }, []);
+  function handleChangeTask(task) {
+    setTasks(
+      tasks.map((t) => {
+        if (t.id === task.id) {
+          return task;
+        } else {
+          return t;
+        }
+      })
+    );
+  }
+
+  function handleDeleteTask(taskId) {
+    setTasks(tasks.filter((t) => t.id !== taskId));
+  }
 
   return (
-    <div>
-      <h1>My Awesome App</h1>
-      {apiData ? (
-        // Render your data here, adjust based on your DTO structure
-        <div>
-          <p>Data from API:</p>
-          <p>{apiData.name}</p>
-          {/* Add more properties as needed */}
-        </div>
-      ) : (
-        // Show a loading spinner or message while data is being fetched
-        <p>Loading...</p>
-      )}
-    </div>
+    <>
+      <h1>Prague itinerary</h1>
+      <AddTask onAddTask={handleAddTask} />
+      <TaskList
+        tasks={tasks}
+        onChangeTask={handleChangeTask}
+        onDeleteTask={handleDeleteTask}
+      />
+    </>
   );
-};
+}
 
-export default App;
+let nextId = 3;
+const initialTasks = [
+  {id: 0, text: 'Visit Kafka Museum', done: true},
+  {id: 1, text: 'Watch a puppet show', done: false},
+  {id: 2, text: 'Lennon Wall pic', done: false},
+];
