@@ -30,3 +30,18 @@
     display: flex;
     justify-content: flex-end;
 }
+
+.tableListsContainer {
+    display: flex;
+    flex-direction: row;
+}
+
+.cardList {
+    display: flex;
+    flex-direction: column;
+    width: 300px;
+}
+
+.card {
+    padding: 5px;
+}

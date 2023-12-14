@@ -2,7 +2,10 @@ import React from "react";
 import Modal from '@mui/material/Modal';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
+import { getCard } from '../../data/features/cardSlice'
+import { useSelector } from 'react-redux';
 
+//TODO move to separate file
 const style = {
     position: 'absolute',
     top: '50%',
@@ -15,8 +18,10 @@ const style = {
     p: 4,
   };
 
-function TaskDescription({ task, open, setOpen }){
+function CardDescription({ open, setOpen }){
     const handleClose = () => setOpen(false);
+
+    const cardDescription = useSelector(getCard);
 
     return (
         <Modal
@@ -27,7 +32,7 @@ function TaskDescription({ task, open, setOpen }){
       >
         <Box sx={style}>
           <Typography id="modal-modal-title" variant="h6" component="h2">
-            {task.text}
+            {cardDescription.text}
           </Typography>
           <Typography id="modal-modal-description" sx={{ mt: 2 }}>
             Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
@@ -37,4 +42,4 @@ function TaskDescription({ task, open, setOpen }){
     );
 } 
 
-export default TaskDescription;
+export default CardDescription;
