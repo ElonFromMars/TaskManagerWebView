@@ -9,7 +9,7 @@ function SignInButton() {
 
     const handleLogin = () => {
         auth.login("test user")
-        navigate('/user');
+        navigate('/signup');
     }
 
     return (

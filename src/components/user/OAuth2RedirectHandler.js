@@ -1,5 +1,5 @@
 import React from 'react';
-//import { ACCESS_TOKEN } from '../../constants';
+import { ACCESS_TOKEN } from '../../constants';
 //TODO
 import { Navigate } from 'react-router-dom'
 
@@ -18,7 +18,7 @@ function OAuth2RedirectHandler() {
     const error = getUrlParameter('error');
 
     if(token) {
-        localStorage.setItem('accessToken', token);
+        localStorage.setItem(ACCESS_TOKEN, token);
      
         return <Navigate to="/profile" state={{ 
             from: window.location.href,
