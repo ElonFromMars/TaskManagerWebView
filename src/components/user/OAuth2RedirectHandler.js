@@ -6,7 +6,7 @@ import { Navigate } from 'react-router-dom'
 function OAuth2RedirectHandler() {
 
     const getUrlParameter = (uriParametrName) => {
-        uriParametrName = uriParametrName.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+        uriParametrName = uriParametrName.replace(/[[]/, '\\[').replace(/[\]]/, '\\]');
         var regex = new RegExp('[\\?&]' + uriParametrName + '=([^&#]*)');
 
         var results = regex.exec(window.location.href.search);

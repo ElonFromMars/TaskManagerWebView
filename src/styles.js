@@ -29,6 +29,7 @@ export const styles = {
 
     tableContainer: {
         maxWidth:"md",
+        p: 1
     },
 
     tableButton: {
@@ -90,5 +91,37 @@ export const styles = {
     mainPageSignInContainer:{
         display: "flex",
         justifyContent: "center",
-    }
+    },
+    workpsacesListHeader:{
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        height: 40,
+        bgcolor: "gray",
+    },
+    workpsacesListHeaderText:{
+        m:1
+    },
+    selectWorkpsaceButton:{
+        display: "flex",
+        alignItems: "stretch",
+        height: 40,
+        bgcolor: "gray",
+    },
+    selectWorkpsaceButtonText:{
+        flexGrow: 1,
+        display: "flex",
+        justifyContent: "start",
+    },
+
+    delteWorkpsaceButton:{
+        p: 0,
+        m: 0,
+        minWidth: 30
+    },
+
+    delteWorkpsaceButtonIcon:{
+        maxHeight: 15,
+        maxWidth: 15,   
+    },
 };

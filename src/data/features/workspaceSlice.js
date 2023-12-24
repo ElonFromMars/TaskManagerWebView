@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
     id: '1',
-    title: "",
+    title: "default",
     tables: [
         {
             id: '1',
@@ -28,10 +28,10 @@ const initialState = {
 };
 
 const workspacesSlice = createSlice({
-    name: 'workspaces',
+    name: 'workspace',
     initialState,
 })
 
-export const selectAllTables = (state) => state.workspaces.tables;//TODO
+export const selectAllTablesFromWorkpace = (state, workspace) => state.workspace.tables;;
 
 export default workspacesSlice.reducer;

@@ -1,7 +1,7 @@
 import Button from '@mui/material/Button';
 import { styles } from '../../styles';
 import { useNavigate } from 'react-router-dom';
-import { Box } from '@mui/material';
+import { Box, AppBar } from '@mui/material';
 
 function NavigationBar() {
     const navigate = useNavigate();
@@ -15,14 +15,16 @@ function NavigationBar() {
     }
 
     return (
-      <Box sx={styles.navigationBar}>
-        <Box sx={styles.navigationBarLeft}>
-          <Button onClick={handleOpenTable} sx={styles.homeButton}>Home</Button>
+      <AppBar position="static">
+        <Box sx={styles.navigationBar}>
+          <Box sx={styles.navigationBarLeft}>
+            <Button onClick={handleOpenTable} sx={styles.homeButton}>Home</Button>
+          </Box>
+          <Box sx={styles.navigationBarRight}>
+            <Button onClick={handleOpenProfile} sx={styles.profileButton}>Profile</Button>
+          </Box>
         </Box>
-        <Box sx={styles.navigationBarRight}>
-          <Button onClick={handleOpenProfile} sx={styles.profileButton}>Profile</Button>
-        </Box>
-      </Box>
+      </AppBar>
     );
 }
 
