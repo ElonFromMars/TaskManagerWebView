@@ -2,25 +2,27 @@ import { Box, Drawer, Button } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import AddIcon from '@mui/icons-material/Add';
 import { styles } from '../../styles';
-import { useSelector } from 'react-redux';
-import { selectAllWorkpaces } from '../../data/features/allWorkspacesSlice.js'
+import { useSelector, useDispatch } from 'react-redux';
 import SelectWorkspaceButton from './SelectWorkspaceButton.js';
+import { selectWorkspace, selectAllWorkpaces } from '../../data/features/workspacesSlice.js'
 
-function Sidebar({isSideBarOpened, toggleSidebar, window}) {
+function Sidebar({isSideBarOpened, toggleSidebar, setOpenCreateWorkspaceModal, window}) {
     const theme = useTheme();
+
+    const dispatch = useDispatch();
 
     const container = window !== undefined ? () => window.document.body : undefined;
     const workspaces = useSelector(selectAllWorkpaces);
     
     const handleCreateWorkspace = () => {
-        
+        setOpenCreateWorkspaceModal(true);
     }
 
-    const handleOpenWorkspace = () => {
-        
+    const handleSelectWorkspace = (workspace) => {
+        dispatch(selectWorkspace({ id: workspace.id }));
     }
 
-    const content = workspaces.map(workspace => <SelectWorkspaceButton key={workspace.id} handleSelectWorkspace={handleOpenWorkspace} workspace={workspace}/>);
+    const content = workspaces.map(workspace => <SelectWorkspaceButton key={workspace.id} handleSelectWorkspace={handleSelectWorkspace} workspace={workspace}/>);
 
     return (
         <Box component ="nav" sx={{ width: 200 }} aria-label="mailbox folders">

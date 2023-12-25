@@ -1,14 +1,17 @@
 import { useSelector } from 'react-redux';
-import { selectAllTablesFromWorkpace } from '../../data/features/workspaceSlice.js'
+import { selectAllTablesFromWorkpace, getSelectdWorkspaceId } from '../../data/features/workspacesSlice.js'
 import TableButton from './TableButton.js';
+import CreateTableButton from './CreateTableButton.js';
 import Sidebar from './Sidebar.js';
 import Grid from '@mui/material/Grid';
 import { useNavigate } from 'react-router-dom';
 import { styles } from '../../styles';
-import { AppBar, Box, Toolbar, IconButton, CssBaseline } from '@mui/material';
+import { AppBar, Box, Toolbar, IconButton } from '@mui/material';
 import { useState } from 'react';
 import MenuIcon from '@mui/icons-material/Menu';
 import { styled, useTheme } from '@mui/material/styles';
+import CreateTableModal from './CreateTableModal.js';
+import CreateWorkspaceModal from './CreateWorkspaceModal.js';
 
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(({ theme, open }) => ({
     ...theme.typography.mainContent,
@@ -33,8 +36,12 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(({
 
 function Workspaces() {
     const [isSideBarOpened, setSideBarOpened] = useState(true);
+    const [isOpenCreateTableModal, setOpenCreateTableModal] = useState(false);
+    const [isOpenCreateWorkspaceModal, setOpenCreateWorkspaceModal] = useState(false);
 
-    const tables = useSelector(selectAllTablesFromWorkpace);
+    const currentWorkspaceId = useSelector(getSelectdWorkspaceId);
+   
+    const tables = useSelector((state) => selectAllTablesFromWorkpace(state, currentWorkspaceId));
     const theme = useTheme();
     
     const navigate = useNavigate();
@@ -43,14 +50,23 @@ function Workspaces() {
         navigate('/user/table');
     }
 
+    const handleCreateTable = () => {
+        setOpenCreateTableModal(!isOpenCreateTableModal);
+    }
+
     const handleLeftDrawerToggle = () => {
         setSideBarOpened(!isSideBarOpened);
     };
 
-    const content = tables.map(table => 
+    let content = tables.map(table => 
     <Grid item key={table.id}>
         <TableButton handleOpenTable={handleOpenTable} table={table}/>
     </Grid>);
+    content.push(
+        <Grid item key={"createTable"}>
+        <CreateTableButton handleCreateTable={handleCreateTable}/>
+    </Grid>
+    );
 
     return (
         <Box>
@@ -69,7 +85,7 @@ function Workspaces() {
                 </Toolbar>
             </AppBar>
             <Box sx={{ display: 'flex'}}>
-                <Sidebar isSideBarOpened={isSideBarOpened} setSideBarOpened={setSideBarOpened} toggleSidebar={handleLeftDrawerToggle}/>
+                <Sidebar isSideBarOpened={isSideBarOpened} setSideBarOpened={setSideBarOpened} toggleSidebar={handleLeftDrawerToggle} setOpenCreateWorkspaceModal={setOpenCreateWorkspaceModal}/>
 
                 <Main theme={theme} open={isSideBarOpened}>
                     <Box>
@@ -79,6 +95,16 @@ function Workspaces() {
                     </Box>
                 </Main>
             </Box>
+            {isOpenCreateTableModal && 
+            <CreateTableModal 
+                isOpen={isOpenCreateTableModal} 
+                setOpen={setOpenCreateTableModal}
+            />}
+            {isOpenCreateWorkspaceModal && 
+            <CreateWorkspaceModal 
+                isOpen={isOpenCreateWorkspaceModal} 
+                setOpen={setOpenCreateWorkspaceModal}
+            />}
         </Box>
     );
   }
