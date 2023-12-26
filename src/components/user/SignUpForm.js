@@ -1,15 +1,20 @@
-import { signup } from '../../data/APIUtils';
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { signupUser, getLoginStatus, getError, clearState } from '../../data/features/userSlice.js';
 
 function SignUpForm() {
     const [formData, setFormData] = useState({
-        name: '',
+        username: '',
         email: "",
         password: ""
     });
 
+    const dispatch = useDispatch();
     const navigate = useNavigate();
+
+    const loginStatus = useSelector(getLoginStatus);
+    const loginError = useSelector(getError);
 
     const handleChange = (event) => {
         const { name, value } = event.target;
@@ -18,24 +23,29 @@ function SignUpForm() {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-    
-        const signUpRequest = Object.assign({}, formData);
 
-        signup(signUpRequest)
-        .then(response => {
-            //alert("You're successfully registered. Please login to continue!");
-            navigate('/login');
-        }).catch(error => {
-            alert((error && error.message) || 'Oops! Something went wrong. Please try again!');            
-        });
+        const request = Object.assign({}, formData);
+        dispatch(signupUser(request));
     };
+
+    useEffect(() => {
+        if (loginStatus === 'failed') {
+            alert((loginError && loginError.message) || 'Oops! Something went wrong. Please try again!');
+            dispatch(clearState());
+        }
+        else if (loginStatus === 'succeeded') {
+            dispatch(clearState());
+            navigate('/login');
+        }
+    });
+
 
     return (
         <form onSubmit={handleSubmit}>
             <div /*className="form-item"*/>
-                <input type="text" name="name" 
-                    /*className="form-control"*/ placeholder="Name"
-                    value={formData.name} onChange={handleChange} required/>
+                <input type="text" name="username" 
+                    /*className="form-control"*/ placeholder="Username"
+                    value={formData.username} onChange={handleChange} required/>
             </div>
             <div /*className="form-item"*/>
                 <input type="email" name="email" 

@@ -3,13 +3,13 @@ import { Box, Button } from '@mui/material';
 import { styles } from '../../styles';
 import CloseIcon from '@mui/icons-material/Close';
 import { useDispatch } from 'react-redux';
-import { removeWorkspace } from '../../data/features/workspacesSlice';
+import { deleteWorkspace } from '../../data/features/workspacesSlice';
 
 function SelectWorkspaceButton({workspace, handleSelectWorkspace}) {
     const dispatch = useDispatch();
 
     const handleRemoveWorkspace= () => {
-        dispatch(removeWorkspace({ id: workspace.id}));
+        dispatch(deleteWorkspace({ id: workspace.id}));
     }
    
     return (

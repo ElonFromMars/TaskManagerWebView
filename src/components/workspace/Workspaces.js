@@ -58,15 +58,23 @@ function Workspaces() {
         setSideBarOpened(!isSideBarOpened);
     };
 
-    let content = tables.map(table => 
-    <Grid item key={table.id}>
-        <TableButton handleOpenTable={handleOpenTable} table={table}/>
-    </Grid>);
-    content.push(
-        <Grid item key={"createTable"}>
-        <CreateTableButton handleCreateTable={handleCreateTable}/>
-    </Grid>
-    );
+    let content;
+    if(tables){
+        content = tables.map(table => 
+        <Grid item key={table.id}>
+            <TableButton handleOpenTable={handleOpenTable} table={table}/>
+        </Grid>);
+        content.push(
+            <Grid item key={"createTable"}>
+            <CreateTableButton handleCreateTable={handleCreateTable}/>
+        </Grid>
+        );
+    }
+    else
+    {
+        content = "";
+    }
+    
 
     return (
         <Box>

@@ -1,7 +1,7 @@
-import { ACCESS_TOKEN } from '../../constants';
-import { login } from '../../data/APIUtils';
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { loginUser, getLoginStatus, getError, clearState } from '../../data/features/userSlice.js';
 
 function LoginForm () {
     const [formData, setFormData] = useState({
@@ -9,7 +9,11 @@ function LoginForm () {
         password: ""
     });
 
+    const dispatch = useDispatch();
     const navigate = useNavigate();
+
+    const loginStatus = useSelector(getLoginStatus);
+    const loginError = useSelector(getError);
 
     const handleChange = (event) => {
         const { name, value } = event.target;
@@ -18,18 +22,19 @@ function LoginForm () {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-    
-        const loginRequest = Object.assign({}, formData);
-
-        login(loginRequest)
-        .then(response => {
-            localStorage.setItem(ACCESS_TOKEN, response.accessToken);
-            //alert("You're successfully logged in!");
-            navigate('/user');
-        }).catch(error => {
-            alert((error && error.message) || 'Oops! Something went wrong. Please try again!');
-        });
+        
+        const request = Object.assign({}, formData);
+        dispatch(loginUser(request));
     };
+
+    if (loginStatus === 'failed') {
+        alert((loginError && loginError.message) || 'Oops! Something went wrong. Please try again!');
+        dispatch(clearState());
+    }
+    else if (loginStatus === 'succeeded') {
+        dispatch(clearState());
+        navigate('/user');
+    }
     
     return (
         <form onSubmit={handleSubmit}>

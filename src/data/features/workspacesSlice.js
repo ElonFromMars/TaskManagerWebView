@@ -1,70 +1,71 @@
 import { createSlice, createAsyncThunk, nanoid } from "@reduxjs/toolkit";
-import axios from "axios";
+import { request } from "./../APIUtils.js";
+import { API_BASE_URL } from '../../constants';
 
-const POSTS_URL = 'https://jsonplaceholder.typicode.com/posts';
 
-export const fetchPosts = createAsyncThunk('posts/fetchPosts', async () => {
-    const response = await axios.get(POSTS_URL)
+function getBaseUrl(getState){
+    const state = getState();
+    const userName = state.user.username;
+
+    return API_BASE_URL + `/user/${userName}`;
+}
+
+export const fetchWorkspaces = createAsyncThunk('workspace/fetchWorkspaces', 
+    async ({ getState }) => {
+
+    const baseUrl = getBaseUrl(getState);
+
+    const response = await request({
+        url: baseUrl  + "/tables",
+        method: 'GET'
+    });
+
     return response.data
 })
 
-export const addNewPost = createAsyncThunk('posts/addNewPost', async (initialPost) => {
-    const response = await axios.post(POSTS_URL, initialPost)
+export const createWorkspace = createAsyncThunk('workspace/createWorkspace', 
+    async (addNewWorkspaceRequest, { getState }) => {
+    
+    const baseUrl = getBaseUrl(getState);
+    
+    const response = await request({
+        url: baseUrl  + "/workpsaces",
+        method: 'POST',
+        body: JSON.stringify(addNewWorkspaceRequest)
+    });
+
     return response.data
+})
+
+export const deleteWorkspace = createAsyncThunk('workspace/deleteWorkspace', 
+    async (deleteWorkspaceRequest, { getState }) => {
+
+})
+
+export const createTable = createAsyncThunk('workspace/createTable', 
+    async (addNewTableRequest, { getState }) => {
+    const baseUrl = getBaseUrl(getState);
+    
+    const response = await request({
+        url: baseUrl  + `/workpsaces/${addNewTableRequest.workspaceName}/tables`,
+        method: 'POST',
+        body: JSON.stringify(addNewTableRequest)
+    });
+
+    return response.data
+})
+
+export const deleteTable = createAsyncThunk('workspace/deleteTable', 
+    async (deleteTableRequest, { getState }) => {
+
 })
 
 const initialState = {
+    name: 'workspaces',
     status: 'idle', //'idle' | 'loading' | 'succeeded' | 'failed'
     error: null,
-    selectdWorkspaceId: "1",
+    selectdWorkspaceId: null,
     workspaces: [
-        {
-            id: '1',
-            title: "Personal",
-            tables: [
-                {
-                    id: '1',
-                    title: 'Table test name 1',
-                },
-                {
-                    id: '2',
-                    title: 'Table test name 2',
-                },
-                {
-                    id: '3',
-                    title: 'Table test name 3',
-                },
-                {
-                    id: '4',
-                    title: 'Table test name 4',
-                },
-                {
-                    id: '5',
-                    title: 'Table test name 5',
-                },
-            ]
-        },
-        {
-            id: '2',
-            title: "workspace name 2",
-            tables: [
-                {
-                    id: '1',
-                    title: 'Table test name 1',
-                },
-                {
-                    id: '2',
-                    title: 'Table test name 2',
-                },
-            ]
-        },
-        {
-            id: '3',
-            title: "workspace name 3",
-            tables: [
-            ]
-        },
-
     ]
 };
 
@@ -105,78 +106,51 @@ const workspacesSlice = createSlice({
     },
     extraReducers(builder) {
         builder
-            .addCase(fetchPosts.pending, (state, action) => {
+            .addCase(fetchWorkspaces.pending, (state, { payload }) => {
                 state.status = 'loading'
             })
-            .addCase(fetchPosts.fulfilled, (state, action) => {
+            .addCase(fetchWorkspaces.fulfilled, (state, { payload }) => {
                 state.status = 'succeeded'
-                // Adding date and reactions
-                let min = 1;
-                const loadedPosts = action.payload.map(post => {
-                    post.date = sub(new Date(), { minutes: min++ }).toISOString();
-                    post.reactions = {
-                        thumbsUp: 0,
-                        wow: 0,
-                        heart: 0,
-                        rocket: 0,
-                        coffee: 0
-                    }
-                    return post;
-                });
 
-                // Add any fetched posts to the array
-                postsAdapter.upsertMany(state, loadedPosts)
+                state.workspaces = payload;
             })
-            .addCase(fetchPosts.rejected, (state, action) => {
+            .addCase(fetchWorkspaces.rejected, (state, { error }) => {
                 state.status = 'failed'
-                state.error = action.error.message
+                state.error = error.message
             })
-            .addCase(addNewPost.fulfilled, (state, action) => {
-                // Fix for API post IDs:
-                // Creating sortedPosts & assigning the id 
-                // would be not be needed if the fake API 
-                // returned accurate new post IDs
 
-                action.payload.id = state.ids[state.ids.length - 1] + 1
-                // End fix for fake API post IDs 
 
-                action.payload.userId = Number(action.payload.userId)
-                action.payload.date = new Date().toISOString();
-                action.payload.reactions = {
-                    thumbsUp: 0,
-                    wow: 0,
-                    heart: 0,
-                    rocket: 0,
-                    coffee: 0
-                }
-                console.log(action.payload)
-                postsAdapter.addOne(state, action.payload)
+            .addCase(createWorkspace.pending, (state, { payload }) => {
+                state.status = 'loading'
             })
-            .addCase(updatePost.fulfilled, (state, action) => {
-                if (!action.payload?.id) {
-                    console.log('Update could not complete')
-                    console.log(action.payload)
-                    return;
-                }
-                action.payload.date = new Date().toISOString();
-                postsAdapter.upsertOne(state, action.payload)
+            .addCase(createWorkspace.fulfilled, (state, { payload }) => {
+                state.status = 'succeeded'
+                state.workspaces.push(payload);
             })
-            .addCase(deletePost.fulfilled, (state, action) => {
-                if (!action.payload?.id) {
-                    console.log('Delete could not complete')
-                    console.log(action.payload)
-                    return;
-                }
-                const { id } = action.payload;
-                postsAdapter.removeOne(state, id)
+            .addCase(createWorkspace.rejected, (state, { error }) => {
+                state.status = 'failed'
+                state.error = error.message
+            })
+
+
+            .addCase(createTable.pending, (state, { payload }) => {
+                state.status = 'loading'
+            })
+            .addCase(createTable.fulfilled, (state, { meta, payload }) => {
+                state.status = 'succeeded'
+                state.workspaces.find(w => w.id === meta.workspaceId).push(payload);
+            })
+            .addCase(createTable.rejected, (state, { error }) => {
+                state.status = 'failed'
+                state.error = error.message
             })
     }
 })
 
-export const selectAllTablesFromWorkpace = (state, id) => state.workspaces.workspaces.find(workspace => workspace.id === id).tables;
+export const selectAllTablesFromWorkpace = (state, id) => state.workspaces.workspaces.find(workspace => workspace.id === id)?.tables;
 export const selectAllWorkpaces = (state) => state.workspaces.workspaces;
 export const getSelectdWorkspaceId = (state) => state.workspaces.selectdWorkspaceId;
 
-export const { selectWorkspace, createTable, createWorkspace, removeWorkspace } = workspacesSlice.actions;
+export const { selectWorkspace } = workspacesSlice.actions;
 
 export default workspacesSlice.reducer;
