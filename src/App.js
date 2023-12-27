@@ -8,6 +8,7 @@ import { AuthProvider } from './security/AuthProvider.js';
 import OAuth2RedirectHandler from './components/user/OAuth2RedirectHandler.js';
 import Login from './components/user/Login.js';
 import SignUp from './components/user/SignUp.js';
+import RequireAuth from './security/RequireAuth.js';
 
 function App() {
   return (
@@ -17,7 +18,7 @@ function App() {
         <Route path='/' element={<StartPage/>}/>
         <Route path='login' element={<Login/>}/>
         <Route path='signup' element={<SignUp/>}/>
-        <Route path='user' element={<PageLayout/>}>
+        <Route path='user' element={<RequireAuth><PageLayout/></RequireAuth>}>
           <Route index element={<Workspaces/>}/> 
           <Route path='workspaces' element={<Workspaces/>}/>
           <Route path='table' element={<Table/>}/>

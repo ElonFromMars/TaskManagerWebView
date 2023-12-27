@@ -26,7 +26,9 @@ function CreateTableModal({ isOpen, setOpen }){
     const currentWorkspaceId = useSelector(getSelectdWorkspaceId);
     const dispatch = useDispatch();
 
-    const handleCreateTable= () => {
+    const handleCreateTable = (event) => {
+        event.preventDefault();
+
         dispatch(createTable({ workspaceId: currentWorkspaceId, title: tableName }));
         handleClose();
         return false;
@@ -40,7 +42,7 @@ function CreateTableModal({ isOpen, setOpen }){
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-            <form autoComplete="off" onSubmit={handleCreateTable} action="#">
+            <form autoComplete="off" onSubmit={handleCreateTable}>
                 <h2>Create Table</h2>
                     <TextField 
                         label="Name"

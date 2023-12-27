@@ -22,19 +22,21 @@ function LoginForm () {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        
+
         const request = Object.assign({}, formData);
         dispatch(loginUser(request));
     };
-
-    if (loginStatus === 'failed') {
-        alert((loginError && loginError.message) || 'Oops! Something went wrong. Please try again!');
-        dispatch(clearState());
-    }
-    else if (loginStatus === 'succeeded') {
-        dispatch(clearState());
-        navigate('/user');
-    }
+    
+    useEffect(() => {
+        if (loginStatus === 'failed') {
+            alert((loginError && loginError.message) || 'Oops! Something went wrong. Please try again!');
+            dispatch(clearState());
+        }
+        else if (loginStatus === 'succeeded') {
+            dispatch(clearState());
+            navigate('/user');
+        }
+    });
     
     return (
         <form onSubmit={handleSubmit}>

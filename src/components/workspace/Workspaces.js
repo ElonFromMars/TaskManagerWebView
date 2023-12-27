@@ -1,5 +1,6 @@
-import { useSelector } from 'react-redux';
-import { selectAllTablesFromWorkpace, getSelectdWorkspaceId } from '../../data/features/workspacesSlice.js'
+import { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { selectAllTablesFromWorkpace, getSelectdWorkspaceId, fetchWorkspaces, getWorkspacesStatus } from '../../data/features/workspacesSlice.js'
 import TableButton from './TableButton.js';
 import CreateTableButton from './CreateTableButton.js';
 import Sidebar from './Sidebar.js';
@@ -7,7 +8,6 @@ import Grid from '@mui/material/Grid';
 import { useNavigate } from 'react-router-dom';
 import { styles } from '../../styles';
 import { AppBar, Box, Toolbar, IconButton } from '@mui/material';
-import { useState } from 'react';
 import MenuIcon from '@mui/icons-material/Menu';
 import { styled, useTheme } from '@mui/material/styles';
 import CreateTableModal from './CreateTableModal.js';
@@ -39,11 +39,13 @@ function Workspaces() {
     const [isOpenCreateTableModal, setOpenCreateTableModal] = useState(false);
     const [isOpenCreateWorkspaceModal, setOpenCreateWorkspaceModal] = useState(false);
 
+    const workspacesStatus = useSelector(getWorkspacesStatus);
     const currentWorkspaceId = useSelector(getSelectdWorkspaceId);
    
     const tables = useSelector((state) => selectAllTablesFromWorkpace(state, currentWorkspaceId));
     const theme = useTheme();
     
+    const dispatch = useDispatch();
     const navigate = useNavigate();
 
     const handleOpenTable = () => {
@@ -58,6 +60,13 @@ function Workspaces() {
         setSideBarOpened(!isSideBarOpened);
     };
 
+
+    useEffect(() => {
+        if (workspacesStatus === 'idle') {
+            dispatch(fetchWorkspaces()).unwrap();
+        }
+    }, [workspacesStatus, dispatch])
+    
     let content;
     if(tables){
         content = tables.map(table => 
@@ -75,7 +84,6 @@ function Workspaces() {
         content = "";
     }
     
-
     return (
         <Box>
             <AppBar position="static">

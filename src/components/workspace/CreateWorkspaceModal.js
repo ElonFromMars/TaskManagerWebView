@@ -24,8 +24,10 @@ function CreateWorkspaceModal({ isOpen, setOpen }){
 
     const dispatch = useDispatch();
 
-    const handleCreateWorkspace= () => {
-        dispatch(createWorkspace({ title: workspaceName }));
+    const handleCreateWorkspace = (event) => {
+        event.preventDefault();
+
+        dispatch(createWorkspace({ name: workspaceName })).unwrap();
         handleClose();
         return false;
     }
@@ -38,7 +40,7 @@ function CreateWorkspaceModal({ isOpen, setOpen }){
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-            <form autoComplete="off" onSubmit={handleCreateWorkspace} action="#">
+            <form autoComplete="off" onSubmit={handleCreateWorkspace}>
                 <h2>Create Workspace</h2>
                     <TextField 
                         label="Name"

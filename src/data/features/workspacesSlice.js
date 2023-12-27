@@ -10,58 +10,57 @@ function getBaseUrl(getState){
     return API_BASE_URL + `/user/${userName}`;
 }
 
-export const fetchWorkspaces = createAsyncThunk('workspace/fetchWorkspaces', 
-    async ({ getState }) => {
+export const fetchWorkspaces = createAsyncThunk('workspaces/fetchWorkspaces', 
+    async (arg, { getState }) => {
 
     const baseUrl = getBaseUrl(getState);
 
     const response = await request({
-        url: baseUrl  + "/tables",
+        url: baseUrl  + "/workspaces",
         method: 'GET'
     });
 
-    return response.data
+    return response;
 })
 
-export const createWorkspace = createAsyncThunk('workspace/createWorkspace', 
+export const createWorkspace = createAsyncThunk('workspaces/createWorkspace', 
     async (addNewWorkspaceRequest, { getState }) => {
     
     const baseUrl = getBaseUrl(getState);
     
     const response = await request({
-        url: baseUrl  + "/workpsaces",
+        url: baseUrl  + "/workspaces",
         method: 'POST',
         body: JSON.stringify(addNewWorkspaceRequest)
     });
 
-    return response.data
+    return response;
 })
 
-export const deleteWorkspace = createAsyncThunk('workspace/deleteWorkspace', 
+export const deleteWorkspace = createAsyncThunk('workspaces/deleteWorkspace', 
     async (deleteWorkspaceRequest, { getState }) => {
 
 })
 
-export const createTable = createAsyncThunk('workspace/createTable', 
+export const createTable = createAsyncThunk('workspaces/createTable', 
     async (addNewTableRequest, { getState }) => {
     const baseUrl = getBaseUrl(getState);
     
     const response = await request({
-        url: baseUrl  + `/workpsaces/${addNewTableRequest.workspaceName}/tables`,
+        url: baseUrl  + `/workspaces/${addNewTableRequest.workspaceName}/tables`,
         method: 'POST',
         body: JSON.stringify(addNewTableRequest)
     });
 
-    return response.data
+    return response;
 })
 
-export const deleteTable = createAsyncThunk('workspace/deleteTable', 
+export const deleteTable = createAsyncThunk('workspaces/deleteTable', 
     async (deleteTableRequest, { getState }) => {
 
 })
 
 const initialState = {
-    name: 'workspaces',
     status: 'idle', //'idle' | 'loading' | 'succeeded' | 'failed'
     error: null,
     selectdWorkspaceId: null,
@@ -72,6 +71,10 @@ const initialState = {
 const workspacesSlice = createSlice({
     name: 'workspaces',
     initialState,
+    clearState: (state) => {
+        state = initialState;
+        return state;
+    },
     reducers: {
         selectWorkspace(state, action) {
             const selectedId = action.payload.id;
@@ -151,6 +154,9 @@ export const selectAllTablesFromWorkpace = (state, id) => state.workspaces.works
 export const selectAllWorkpaces = (state) => state.workspaces.workspaces;
 export const getSelectdWorkspaceId = (state) => state.workspaces.selectdWorkspaceId;
 
-export const { selectWorkspace } = workspacesSlice.actions;
+export const getWorkspacesStatus = (state) => state.workspaces.status;
+export const getError = (state) => state.workspaces.error;
+
+export const { selectWorkspace, clearState } = workspacesSlice.actions;
 
 export default workspacesSlice.reducer;

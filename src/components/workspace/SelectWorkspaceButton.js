@@ -15,7 +15,7 @@ function SelectWorkspaceButton({workspace, handleSelectWorkspace}) {
     return (
         <Box sx={styles.selectWorkpsaceButton}>
             <Button sx={styles.selectWorkpsaceButtonText} onClick={()=>handleSelectWorkspace(workspace)}>
-                {workspace.title}
+                {workspace.name}
             </Button> 
             <Button sx={styles.delteWorkpsaceButton} onClick={handleRemoveWorkspace}>
                 <CloseIcon sx={styles.delteWorkpsaceButtonIcon}/>

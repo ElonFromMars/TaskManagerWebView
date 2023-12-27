@@ -10,7 +10,7 @@ export const signupUser = createAsyncThunk('user/signupUser',
             body: JSON.stringify(signupRequest)
         });
 
-        return response.data
+        return response;
     }
 );
 
@@ -22,7 +22,7 @@ export const loginUser = createAsyncThunk('user/loginUser',
             body: JSON.stringify(loginRequest)
         });
         
-        return response.data
+        return response;
     }
 );
 
@@ -37,7 +37,7 @@ export const fetchUserBytoken  = createAsyncThunk('user/fetchUserBytoken',
             method: 'GET'
         });
 
-        return response.data
+        return response;
     }
 );
 
@@ -63,12 +63,12 @@ export const userSlice = createSlice({
             .addCase(signupUser.pending, (state, { payload }) => {
                 state.status = 'loading'
             })
-            .addCase(signupUser.fulfilled, (state, { payload }) => {
+            .addCase(signupUser.fulfilled, (state, { meta }) => {
                 state.status = 'succeeded'
 
-                state.email = payload.email;
-                state.username = payload.username;
-                state.name = payload.name;
+                state.email = meta.email;
+                state.username = meta.username;
+                state.name = meta.name;
             })
             .addCase(signupUser.rejected, (state, { error }) => {
                 state.status = 'failed'
@@ -99,10 +99,11 @@ export const userSlice = createSlice({
                 state.status = 'loading'
             })
             .addCase(fetchUserBytoken.fulfilled, (state, { payload }) => {
-                state.status = 'succeeded'
-
+            
                 state.email = payload.email;
                 state.username = payload.username;
+
+                state.status = 'succeeded'
             })
             .addCase(fetchUserBytoken.rejected, (state, { error }) => {
                 state.status = 'failed'
