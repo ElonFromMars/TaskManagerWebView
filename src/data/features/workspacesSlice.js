@@ -47,7 +47,7 @@ export const createTable = createAsyncThunk('workspaces/createTable',
     const baseUrl = getBaseUrl(getState);
     
     const response = await request({
-        url: baseUrl  + `/workspaces/${addNewTableRequest.workspaceName}/tables`,
+        url: baseUrl  + `/workspaces/${addNewTableRequest.workspaceId}/tables`,
         method: 'POST',
         body: JSON.stringify(addNewTableRequest)
     });
@@ -116,6 +116,9 @@ const workspacesSlice = createSlice({
                 state.status = 'succeeded'
 
                 state.workspaces = payload;
+                if(payload?.length > 0){
+                    state.selectdWorkspaceId = payload[0].id;
+                }
             })
             .addCase(fetchWorkspaces.rejected, (state, { error }) => {
                 state.status = 'failed'
@@ -141,7 +144,7 @@ const workspacesSlice = createSlice({
             })
             .addCase(createTable.fulfilled, (state, { meta, payload }) => {
                 state.status = 'succeeded'
-                state.workspaces.find(w => w.id === meta.workspaceId).push(payload);
+                state.workspaces.find(w => w.id === meta.arg.workspaceId).cardTables.push(payload);
             })
             .addCase(createTable.rejected, (state, { error }) => {
                 state.status = 'failed'
@@ -150,7 +153,7 @@ const workspacesSlice = createSlice({
     }
 })
 
-export const selectAllTablesFromWorkpace = (state, id) => state.workspaces.workspaces.find(workspace => workspace.id === id)?.tables;
+export const selectAllTablesFromWorkpace = (state, id) => state.workspaces.workspaces.find(workspace => workspace.id === id)?.cardTables;
 export const selectAllWorkpaces = (state) => state.workspaces.workspaces;
 export const getSelectdWorkspaceId = (state) => state.workspaces.selectdWorkspaceId;
 

@@ -9,7 +9,7 @@ function SelectWorkspaceButton({workspace, handleSelectWorkspace}) {
     const dispatch = useDispatch();
 
     const handleRemoveWorkspace= () => {
-        dispatch(deleteWorkspace({ id: workspace.id}));
+        dispatch(deleteWorkspace({ id: workspace.id})).unwrap();
     }
    
     return (

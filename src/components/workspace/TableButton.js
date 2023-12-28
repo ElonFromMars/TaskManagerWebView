@@ -6,7 +6,7 @@ function TableButton({table, handleOpenTable}) {
     return (
         <>
             <Button onClick={handleOpenTable} sx={styles.tableButton}>
-                {table.title}
+                {table.name}
             </Button>
         </>
     );

@@ -29,7 +29,7 @@ function CreateTableModal({ isOpen, setOpen }){
     const handleCreateTable = (event) => {
         event.preventDefault();
 
-        dispatch(createTable({ workspaceId: currentWorkspaceId, title: tableName }));
+        dispatch(createTable({ workspaceId: currentWorkspaceId, name: tableName }));
         handleClose();
         return false;
     }
