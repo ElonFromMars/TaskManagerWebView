@@ -37,6 +37,15 @@ const tableSlice = createSlice({
     name: 'table',
     initialState,
     reducers: {
+        listAdded(state, action) {
+            const list =
+            {
+                id: nanoid(),
+                title: "New list",
+                cards: []
+            };
+            state.lists.push(list);
+        },
         cardAdded(state, action) {
             const card =
             {
@@ -50,7 +59,7 @@ const tableSlice = createSlice({
         },
         cardDeleted(state, action) {
             
-        }
+        },
     }
 })
 

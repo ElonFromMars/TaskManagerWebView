@@ -5,6 +5,7 @@ import { Stack, ListItem } from '@mui/material';
 import { styles } from '../../styles';
 import CardDescription from '../card/CardDescription.js';
 import { useState } from 'react';
+import AddList from './AddList.js';
 
 function Table() {
  
@@ -16,10 +17,12 @@ function Table() {
     setOpenTaskDescription(true);
   }
 
-  const content = cardLists.map(cardList => 
+  let content = cardLists.map(cardList => 
     <ListItem style={styles.listsContainerItem}>
       <CardsList key={cardList.id} cardList={cardList} onOpenCard={handleOpenCard}/>
     </ListItem>)
+
+  content.push(<ListItem style={styles.listsContainerItem}><AddList/></ListItem>);
 
   return (
     <>

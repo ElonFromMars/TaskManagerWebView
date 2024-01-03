@@ -10,6 +10,17 @@ export const styles = {
         width: 250,
         m: 0,
     },
+    addlistContainer: {
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'flex-start',
+        alignItems: 'top',
+        borderRadius: 3,
+        bgcolor: "gray",
+        p: 1,
+        width: 250,
+        m: 0,
+    },
     listTitle: {
         bgcolor: "background.paper",
         color: "text.primary",

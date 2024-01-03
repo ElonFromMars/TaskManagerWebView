@@ -25,14 +25,14 @@ function Card({card, onOpenCard}) {
     }
 
     const onCardTitleChanged = (e) => {
-      dispatch(cardTitleChanged({...card, text: e.target.value })).unwrap();
+      dispatch(cardTitleChanged({...card, title: e.target.value }))//.unwrap();
     }
    
     let taskContent;
     if (isEditing) {
         taskContent = (
         <>
-            <input value={card.text} onChange={onCardTitleChanged}/>
+            <input value={card.title} onChange={onCardTitleChanged}/>
             <button onClick={onSaveButtonClicked}>Save</button>
         </>
         );
