@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { signupUser, getLoginStatus, getError, clearState } from '../../data/features/userSlice.js';
+import { registerUser, getLoginStatus, getError, clearState } from '../../data/features/userSlice.js';
 
 function SignUpForm() {
     const [formData, setFormData] = useState({
@@ -25,7 +25,7 @@ function SignUpForm() {
         event.preventDefault();
 
         const request = Object.assign({}, formData);
-        dispatch(signupUser(request));
+        dispatch(registerUser(request));
     };
 
     useEffect(() => {

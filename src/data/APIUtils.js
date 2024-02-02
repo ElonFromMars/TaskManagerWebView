@@ -1,24 +1,19 @@
-import { ACCESS_TOKEN } from '../constants';
+import axios from "axios";
+import {API_BASE_URL} from '../constants';
 
-export const request = (options) => {
-    const headers = new Headers({
-        'Content-Type': 'application/json',
-    })
-    
-    if(localStorage.getItem(ACCESS_TOKEN)) {
-        headers.append('Authorization', 'Bearer ' + localStorage.getItem(ACCESS_TOKEN))
-    }
+export const axiosInstance = axios.create({
+    baseURL: API_BASE_URL,
+    withCredentials: true
+});
 
-    const defaults = {headers: headers};
-    options = Object.assign({}, defaults, options);
+export const apiGet = (url, body) => {
+    return axiosInstance.get(url, body);
+};
 
-    return fetch(options.url, options)
-    .then(response => 
-        response.json().then(json => {
-            if(!response.ok) {
-                return Promise.reject(json);
-            }
-            return json;
-        })
-    );
+export const apiPost = (url, body) => {
+    return axiosInstance.post(url, body);
+};
+
+export const apiPut = (url, body) => {
+    return axiosInstance.put(url, body);
 };

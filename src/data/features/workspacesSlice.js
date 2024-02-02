@@ -1,13 +1,12 @@
 import { createSlice, createAsyncThunk, nanoid } from "@reduxjs/toolkit";
-import { request } from "./../APIUtils.js";
-import { API_BASE_URL } from '../../constants';
+import { apiGet, apiPut } from "./../APIUtils.js";
 
 
 function getBaseUrl(getState){
     const state = getState();
     const userName = state.user.username;
 
-    return API_BASE_URL + `/user/${userName}`;
+    return `/users/${userName}`;
 }
 
 export const fetchWorkspaces = createAsyncThunk('workspaces/fetchWorkspaces', 
@@ -15,12 +14,9 @@ export const fetchWorkspaces = createAsyncThunk('workspaces/fetchWorkspaces',
 
     const baseUrl = getBaseUrl(getState);
 
-    const response = await request({
-        url: baseUrl  + "/workspaces",
-        method: 'GET'
-    });
+    const response = await apiGet(baseUrl  + "/workspaces");
 
-    return response;
+    return response.data;
 })
 
 export const createWorkspace = createAsyncThunk('workspaces/createWorkspace', 
@@ -28,13 +24,9 @@ export const createWorkspace = createAsyncThunk('workspaces/createWorkspace',
     
     const baseUrl = getBaseUrl(getState);
     
-    const response = await request({
-        url: baseUrl  + "/workspaces",
-        method: 'POST',
-        body: JSON.stringify(addNewWorkspaceRequest)
-    });
+    const response = await apiPut(baseUrl  + "/workspaces", addNewWorkspaceRequest);
 
-    return response;
+    return response.data;
 })
 
 export const deleteWorkspace = createAsyncThunk('workspaces/deleteWorkspace', 
@@ -46,13 +38,9 @@ export const createTable = createAsyncThunk('workspaces/createTable',
     async (addNewTableRequest, { getState }) => {
     const baseUrl = getBaseUrl(getState);
     
-    const response = await request({
-        url: baseUrl  + `/workspaces/${addNewTableRequest.workspaceId}/tables`,
-        method: 'POST',
-        body: JSON.stringify(addNewTableRequest)
-    });
+    const response = await apiPut(baseUrl  + `/workspaces/${addNewTableRequest.workspaceId}/tables`, addNewTableRequest);
 
-    return response;
+    return response.data;
 })
 
 export const deleteTable = createAsyncThunk('workspaces/deleteTable', 

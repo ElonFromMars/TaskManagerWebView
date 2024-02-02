@@ -1,43 +1,27 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { request}  from "./../APIUtils.js";
-import { API_BASE_URL, ACCESS_TOKEN } from '../../constants';
+import { apiPost, apiGet }  from "./../APIUtils.js";
+import { ACCESS_TOKEN } from '../../constants';
 
-export const signupUser = createAsyncThunk('user/signupUser',
+export const registerUser = createAsyncThunk('user/registerUser',
     async (signupRequest) => {
-        const response = await request({
-            url: API_BASE_URL + "/auth/signup",
-            method: 'POST',
-            body: JSON.stringify(signupRequest)
-        });
+        const response = await apiPost("auth/register", signupRequest);
 
-        return response;
+        return response.data;
     }
 );
 
 export const loginUser = createAsyncThunk('user/loginUser',
     async (loginRequest) => {
-        const response = await request({
-            url: API_BASE_URL + "/auth/login",
-            method: 'POST',
-            body: JSON.stringify(loginRequest)
-        });
+        const response = await apiPost("/auth/login", loginRequest);
         
-        return response;
+        return response.data;
     }
 );
 
 export const fetchUserBytoken  = createAsyncThunk('user/fetchUserBytoken',
     async () => {
-        if(!localStorage.getItem(ACCESS_TOKEN)) {
-            return Promise.reject("No access token set.");
-        }
-    
-        const response = await request({
-            url: API_BASE_URL + "/user/me",
-            method: 'GET'
-        });
-
-        return response;
+        const response = await apiGet("/users/me");
+        return response.data;
     }
 );
 
@@ -60,17 +44,17 @@ export const userSlice = createSlice({
     },
     extraReducers(builder) {
         builder
-            .addCase(signupUser.pending, (state, { payload }) => {
+            .addCase(registerUser.pending, (state, { payload }) => {
                 state.status = 'loading'
             })
-            .addCase(signupUser.fulfilled, (state, { meta }) => {
+            .addCase(registerUser.fulfilled, (state, { meta }) => {
                 state.status = 'succeeded'
 
                 state.email = meta.email;
                 state.username = meta.username;
                 state.name = meta.name;
             })
-            .addCase(signupUser.rejected, (state, { error }) => {
+            .addCase(registerUser.rejected, (state, { error }) => {
                 state.status = 'failed'
                 state.error = error.message;
             })
@@ -83,7 +67,7 @@ export const userSlice = createSlice({
                 state.status = 'succeeded'
 
                 //TODO move to field
-                localStorage.setItem(ACCESS_TOKEN, payload.accessToken);
+                //localStorage.setItem(ACCESS_TOKEN, payload.accessToken);
                 
                 state.email = payload.email;
                 state.username = payload.username;
