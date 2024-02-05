@@ -1,0 +1,14 @@
+{
+  "files": {
+    "main.css": "/TaskManagerWebView/static/css/main.fcba0e0b.css",
+    "main.js": "/TaskManagerWebView/static/js/main.c72c3129.js",
+    "static/media/google-logo.png": "/TaskManagerWebView/static/media/google-logo.d74131b9cd3ee4fff4ca.png",
+    "index.html": "/TaskManagerWebView/index.html",
+    "main.fcba0e0b.css.map": "/TaskManagerWebView/static/css/main.fcba0e0b.css.map",
+    "main.c72c3129.js.map": "/TaskManagerWebView/static/js/main.c72c3129.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.fcba0e0b.css",
+    "static/js/main.c72c3129.js"
+  ]
+}
