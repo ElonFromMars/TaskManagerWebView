@@ -14,9 +14,8 @@ function App() {
   return (
     <>
     <AuthProvider>
-      <Routes>TaskManagerWebView
+      <Routes>
         <Route path='/' element={<StartPage/>}/>
-        <Route path='/TaskManagerWebView' element={<StartPage/>}/>
         <Route path='login' element={<Login/>}/>
         <Route path='signup' element={<SignUp/>}/>
         <Route path='user' element={<RequireAuth><PageLayout/></RequireAuth>}>
