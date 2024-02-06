@@ -36,9 +36,8 @@ export const deleteWorkspace = createAsyncThunk('workspaces/deleteWorkspace',
 
 export const createTable = createAsyncThunk('workspaces/createTable', 
     async (addNewTableRequest, { getState }) => {
-    const baseUrl = getBaseUrl(getState);
     
-    const response = await apiPut(baseUrl  + `/workspaces/${addNewTableRequest.workspaceId}/tables`, addNewTableRequest);
+    const response = await apiPut(`/workspaces/${addNewTableRequest.workspaceId}/tables`, addNewTableRequest);
 
     return response.data;
 })
