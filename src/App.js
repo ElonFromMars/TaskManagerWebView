@@ -21,7 +21,7 @@ function App() {
         <Route path='user' element={<RequireAuth><PageLayout/></RequireAuth>}>
           <Route index element={<Workspaces/>}/> 
           <Route path='workspaces' element={<Workspaces/>}/>
-          <Route path='table' element={<Table/>}/>
+          <Route path='table/:id' element={<Table/>}/>
           <Route path='profile' element={<UserProfile/>}/>
         </Route>
         <Route path="/oauth2/redirect" element={<OAuth2RedirectHandler/>}></Route>  

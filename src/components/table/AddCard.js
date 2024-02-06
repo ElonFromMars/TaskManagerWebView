@@ -1,32 +1,28 @@
-import { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { cardAdded } from '../../data/features/tableSlice'
+import {useState} from 'react';
 
-function AddCard({cardList}) {
-  const [text, setText] = useState('');
-  
-  const dispatch = useDispatch();
+function AddCard({onAddButtonClick}) {
+    const [text, setText] = useState('');
 
-  const onAddButtonClicked = () => {
-    dispatch(cardAdded({ listId: cardList.id, title : text }));
-    setText('');
-  }
+    const handleAddButtonClicked = () => {
+        onAddButtonClick({name: text});
+        setText('');
+    }
 
-  const onChangeText = (e) => setText(e.target.value)
+    const onChangeText = (e) => setText(e.target.value)
 
-  return (
-    <div>
-      <input
-        placeholder="Add task"
-        value={text}
-        onChange={onChangeText}
-      />
-      <button
-        onClick={onAddButtonClicked}>
-        Add
-      </button>
-    </div>
-  );
+    return (
+        <div>
+            <input
+                placeholder="Add task"
+                value={text}
+                onChange={onChangeText}
+            />
+            <button
+                onClick={handleAddButtonClicked}>
+                Add
+            </button>
+        </div>
+    );
 }
 
 export default AddCard;

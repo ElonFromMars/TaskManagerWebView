@@ -1,42 +1,46 @@
-import { createSlice, nanoid } from "@reduxjs/toolkit";
+import {createAsyncThunk, createSlice, nanoid} from "@reduxjs/toolkit";
+import {apiGet, apiPut} from "../APIUtils";
+
+export const fetchTable = createAsyncThunk('workspaces/fetchTable',
+    async (fetchTableRequest) => {
+        const url = "/tables/" + fetchTableRequest.id;
+        const response = await apiGet(url, fetchTableRequest);
+        return response.data;
+    }
+)
+
+export const createCardList = createAsyncThunk('table/createCardList',
+    async (createCardListRequest, {getState}) => {
+        const state = getState();
+        const url = `/tables/${state.table.table.id}/cardLists/`;
+        const response = await apiPut(url, createCardListRequest);
+        return response.data;
+    }
+)
+
+export const createCard = createAsyncThunk('table/createCard',
+    async (createCardRequest, {getState}) => {
+        const state = getState();
+        const url = `/tables/${state.table.table.id}/cardLists/${createCardRequest.cardListId}/cards`;
+        const response = await apiPut(url, createCardRequest);
+        return response.data;
+    }
+)
 
 const initialState = {
-    id: '1',
-    title: "",
-    lists: [
-        {
-            id: '1',
-            title: 'List test name 1',
-            cards: [
-                {id: '1', title: "Card test name 1"},
-                {id: '2', title: "Card test name 2"},
-                {id: '3', title: "Card test name 3"},
-            ]
-        },
-        {
-            id: '2',
-            title: 'List test name 2',
-            cards: [
-                {id: '1', title: "Card test name 1"},
-                {id: '2', title: "Card test name 2"},
-                {id: '3', title: "Card test name 3"},
-                {id: '4', title: "Card test name 4"},
-            ]
-        },
-        {
-            id: '3',
-            title: 'List test name 3',
-            cards: [
-                {id: '1', title: "Card test name 1"},
-            ]
-        },
-    ]
+    status: 'idle', //'idle' | 'loading' | 'succeeded' | 'failed'
+    table : {
+        cardLists : []
+    }
 };
 
 const tableSlice = createSlice({
     name: 'table',
     initialState,
     reducers: {
+        clearState: (state) => {
+            return initialState;
+        },
         listAdded(state, action) {
             const list =
             {
@@ -44,15 +48,15 @@ const tableSlice = createSlice({
                 title: "New list",
                 cards: []
             };
-            state.lists.push(list);
+            state.table.cardLists.push(list);
         },
         cardAdded(state, action) {
             const card =
             {
                 id: nanoid(),
-                title: action.payload.title,
+                name: action.payload.name,
             } 
-            state.lists.find(l=>l.id === action.payload.listId)?.cards.push(card);
+            state.cardLists.find(l=>l.id === action.payload.listId)?.cards.push(card);
         },
         cardTitleChanged(state, action) {
             
@@ -60,11 +64,33 @@ const tableSlice = createSlice({
         cardDeleted(state, action) {
             
         },
+    },
+    extraReducers(builder) {
+        builder
+            .addCase(fetchTable.pending, (state, { payload }) => {
+                state.status = 'loading'
+            })
+            .addCase(fetchTable.fulfilled, (state, { meta, payload }) => {
+                state.status = 'succeeded'
+                state.table = payload;
+            })
+            .addCase(fetchTable.rejected, (state, { error }) => {
+                state.status = 'failed'
+                state.error = error.message
+            })
+
+            .addCase(createCardList.fulfilled, (state, { meta, payload }) => {
+                state.table.cardLists.push(payload);
+            })
+            .addCase(createCard.fulfilled, (state, { meta, payload }) => {
+                state.table.cardLists.find(cardList => cardList.id === meta.arg.cardListId).cards.push(payload);
+            })
     }
 })
 
-export const selectAllCardLists = (state) => state.table.lists;
+export const selectAllCardLists = (state) => state.table.table.cardLists;
+export const getTableStatus = (state) => state.table.status;
 
-export const { listAdded, cardAdded, cardTitleChanged, cardDeleted } = tableSlice.actions;
+export const { clearState, listAdded, cardAdded, cardTitleChanged, cardDeleted } = tableSlice.actions;
 
 export default tableSlice.reducer;

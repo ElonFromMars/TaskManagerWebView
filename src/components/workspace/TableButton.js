@@ -2,10 +2,13 @@ import Button from '@mui/material/Button';
 import { styles } from '../../styles';
 
 function TableButton({table, handleOpenTable}) {
-
+    function handleOpenTableButtonClick() {
+        handleOpenTable(table.id);
+    }
+    
     return (
         <>
-            <Button onClick={handleOpenTable} sx={styles.tableButton}>
+            <Button onClick={handleOpenTableButtonClick} sx={styles.tableButton}>
                 {table.name}
             </Button>
         </>

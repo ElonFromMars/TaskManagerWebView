@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { cardTitleChanged, cardDeleted } from '../../data/features/tableSlice'
@@ -25,21 +24,21 @@ function Card({card, onOpenCard}) {
     }
 
     const onCardTitleChanged = (e) => {
-      dispatch(cardTitleChanged({...card, title: e.target.value }))//.unwrap();
+      dispatch(cardTitleChanged({...card, name: e.target.value }))//.unwrap();
     }
    
     let taskContent;
     if (isEditing) {
         taskContent = (
         <>
-            <input value={card.title} onChange={onCardTitleChanged}/>
+            <input value={card.name} onChange={onCardTitleChanged}/>
             <button onClick={onSaveButtonClicked}>Save</button>
         </>
         );
     } else {
         taskContent = (
         <>
-            {card.title}
+            {card.name}
             <button onClick={onEditButtonClicked}>Edit</button>
             <button onClick={onOpenButtonClicked}>Open</button>
         </>

@@ -69,25 +69,6 @@ const workspacesSlice = createSlice({
                 state.selectdWorkspaceId = selectedId;
             }
         },
-        createTable(state, action) {
-            const workspaceIndex = state.workspaces.map(w => w.id).indexOf(action.payload.workspaceId);
-            if(workspaceIndex !== -1){
-                const newTable = {
-                    id: nanoid(),
-                    title: action.payload.title
-                }
-                state.workspaces[workspaceIndex].tables.push(newTable);
-            }
-        },
-        createWorkspace(state, action) {
-            const newWorkspace = {
-                id: nanoid(),
-                title: action.payload.title,
-                tables: [
-                ]
-            }
-            state.workspaces.push(newWorkspace);
-        },
         removeWorkspace(state, action) {
             const workspaces = state.workspaces.filter(workspace => workspace.id !== action.payload.id);
             state.workspaces = workspaces;

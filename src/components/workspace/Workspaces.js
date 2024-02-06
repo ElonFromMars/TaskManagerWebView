@@ -48,8 +48,8 @@ function Workspaces() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    const handleOpenTable = () => {
-        navigate('/user/table');
+    const handleOpenTable = (tableId) => {
+        navigate("/user/table/" + tableId);
     }
 
     const handleCreateTable = () => {
@@ -59,8 +59,7 @@ function Workspaces() {
     const handleLeftDrawerToggle = () => {
         setSideBarOpened(!isSideBarOpened);
     };
-
-
+    
     useEffect(() => {
         if (workspacesStatus === 'idle') {
             dispatch(fetchWorkspaces()).unwrap();
