@@ -39,7 +39,7 @@ const tableSlice = createSlice({
     initialState,
     reducers: {
         clearState: (state) => {
-            return initialState;
+            Object.assign(state, initialState)
         },
         listAdded(state, action) {
             const list =

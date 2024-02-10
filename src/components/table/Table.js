@@ -41,7 +41,7 @@ function Table() {
 
   useEffect(() => {
     return () => {
-      dispatch({ type: clearState })
+      dispatch(clearState())
     }
   }, [])
   
